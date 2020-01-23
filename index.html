@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<head>
+<link rel="stylesheet" href="./css/slotmachine.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rye">
+<script src="./js/odometer.js">
+
+</script>
+
+<style>
+.button {
+    background-color: blue;
+    border: none;
+    width: 30%;
+    height: 300px;
+    color: white;
+    padding: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 40px;
+    margin: 4px 2px;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.main {
+    padding: 10px;
+    border: none;
+    width: 100%;
+    color: black;
+    font-size: 200px;
+    text-align: center;
+}
+
+p.sub {
+    padding: 10px;
+    border: none;
+    width: 100%;
+    color: black;
+    font-size: 40px;
+    text-align: center;
+    text-decoration: none;
+
+}
+
+.odometer {
+    font-size: 400px;
+}
+
+
+
+</style>
+</head>
+<div class = "main">
+<div id="odometerDiv"  onclick="generateNumbers()" >99</div>
+<p class="sub" id="counter"></p>
+</div>
+<script>
+var counter = 1;
+var uLimit = 56;
+var randomArray = createArray(uLimit);
+randomArray = shuffleArray(randomArray);
+var odel = document.getElementById("odometerDiv");
+var od = new Odometer({
+  el: odel,
+  format: '(dd)',
+  value:99,
+  // Any option (other than auto and selector) can be passed in here
+  theme: 'minimal',
+  duration: 3000,
+});
+
+
+function generateNumbers() {
+       if (randomArray.length > 0){
+        setTimeout(function(){
+            od.update(randomArray.pop(0));
+    	      document.getElementById("counter").innerHTML = "Question count: "+counter;
+            counter = counter +1;
+            if(randomArray.length == 0){
+              document.getElementById("counter")
+            var elem = document.getElementById("counter");
+            elem.setAttribute("style","color: red;");
+            elem.innerHTML = "Done!";
+          }}, 100);
+        }
+    };
+
+
+
+
+
+function createArray(uplim){
+  numArray=[];
+  for(i=1;i<=uplim;i++){
+    numArray.push(i);
+  };
+return numArray;
+}
+
+function shuffleArray(numArray) {
+  var currentIndex = numArray.length, temporaryValue, randomIndex;
+  while (0 !== currentIndex) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    temporaryValue = numArray[currentIndex];
+    numArray[currentIndex] = numArray[randomIndex];
+    numArray[randomIndex] = temporaryValue;
+  }
+  return numArray;
+}
+
+
+</script>
+
+</body>
+</html>
