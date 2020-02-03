@@ -35,39 +35,59 @@
     text-align: center;
 }
 
-p.sub {
-    padding: 10px;
+
+.odometer {
+    font-size: 400px;
+    padding: 50px;
+}
+
+.infoDiv{
+  padding: 10px;
     border: none;
     width: 100%;
-    color: black;
-    font-size: 40px;
-    text-align: center;
+    color: gray;
+    font-size: 25px;
+    text-align: left;
     text-decoration: none;
 
 }
 
-.odometer {
-    font-size: 400px;
+
+.button {
+    background-color:red;
+    background-origin: none;
+    color: white;
+    text-align: center;
+    font-size: 50px;
+    padding: 5px 5px;
+    width: 100%;
+    height: 10%;
 }
-
-
 
 </style>
 </head>
 <div class = "main">
-<div id="odometerDiv"  onclick="generateNumbers()" >99</div>
-<p class="sub" id="counter"></p>
+<div id="odometerDiv"  onclick="generateNumbers()" ></div>
+<div id="histCounter" class="infoDiv">Remaining numbers: 
 </div>
+<div id="counter" class="infoDiv">Previous numbers: </div>
+ <button id="reloadButton" class="button" style="display: none;"  onclick="location.reload()">Reload?</button>
+</div>
+
+
+</div>
+
+
 <script>
 var counter = 1;
-var uLimit = 56;
+var uLimit = inputMaxNumber();
 var randomArray = createArray(uLimit);
 randomArray = shuffleArray(randomArray);
 var odel = document.getElementById("odometerDiv");
 var od = new Odometer({
   el: odel,
-  format: '(dd)',
-  value:99,
+  format: '(ddd)',
+  value: 9999,
   // Any option (other than auto and selector) can be passed in here
   theme: 'minimal',
   duration: 3000,
@@ -77,15 +97,23 @@ var od = new Odometer({
 function generateNumbers() {
        if (randomArray.length > 0){
         setTimeout(function(){
-            od.update(randomArray.pop(0));
-    	      document.getElementById("counter").innerHTML = "Question count: "+counter;
+           var randNum = randomArray.pop(0);
+           od.update(randNum);
+           var histTxt = document.getElementById("histCounter").innerHTML;
+           histTxt = histTxt + randNum +", ";
+           document.getElementById("histCounter").innerHTML = histTxt;
+           var remItems = uLimit-counter;
+    	      document.getElementById("counter").innerHTML = "Remaining counter: "+remItems;
             counter = counter +1;
             if(randomArray.length == 0){
               document.getElementById("counter")
             var elem = document.getElementById("counter");
             elem.setAttribute("style","color: red;");
             elem.innerHTML = "Done!";
-          }}, 100);
+            var elem = document.getElementById("reloadButton");
+            elem.style.display = 'block';
+
+          }}, 10);
         }
     };
 
@@ -113,6 +141,32 @@ function shuffleArray(numArray) {
   return numArray;
 }
 
+function inputMaxNumber() {
+  var maxNum = prompt("Please enter the total number of items greater than 2:", "34");
+  if (maxNum == null || maxNum == "" ) {
+    alert("Oops :( - No number was entered! ");
+    inputMaxNumber();
+  } else {
+    maxNum = Number.parseInt(maxNum, 10);
+    if(maxNum <2 || Number.isInteger(maxNum) == false){
+      alert("Oops :( - Please enter a valid number greater than 2! ");
+      inputMaxNumber();
+    }
+    
+  }
+  return maxNum;
+}
+
+
+function askforRestart(){
+ 
+  if (confirm("Do tyou want to  restart the counter?")) {
+  txt = "You pressed OK!";
+} else {
+  txt = "You pressed Cancel!";
+}
+
+}
 
 </script>
 
