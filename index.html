@@ -5,11 +5,13 @@
 <head>
 <link rel="stylesheet" href="./css/slotmachine.css" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rye">
-<script src="./js/odometer.js">
-
-</script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+<script src="./js/odometer.js"></script>
 
 <style>
+    
 .button {
     background-color: blue;
     border: none;
@@ -90,15 +92,21 @@
 
 </style>
 </head>
+
+<div>
+  <h1><time>00:00:00</time></h1>
+  <button id="start"> <i class="fas fa-play"></i> </button>
+  <button  id="stop"><i class="fas fa-pause"></i></button>
+  <button id="clear"><i class="fas fa-trash-alt"></i></button>
+</div>
+
 <div class = "main">
   <div id="odometerDiv"  onclick="generateNumbers()" ></div>
   <div class="itemContainer">
     <div id="counter" class="infoDiv">Total items left: </div>
     <div id="histCounter" class="infoDiv">Previous items: </div>
-      <button id="reloadButton" class="button" style="display: none;"  onclick="resetCounter()">Reload?</button>
+      <button id="reloadButton" style="display: none;"  onclick="resetCounter()">Reload?</button>
   </div>
-</div>
-
 
 <script>
 var counter = 1;
@@ -106,6 +114,8 @@ var uLimit = inputMaxNumber();
 var randomArray = createArray(uLimit);
 randomArray = shuffleArray(randomArray);
 var odel = document.getElementById("odometerDiv");
+var seconds = 0, minutes = 0, hours = 0, t;
+
 var od = new Odometer({
   el: odel,
   format: '(ddd)',
@@ -170,7 +180,7 @@ function inputMaxNumber() {
     inputMaxNumber();
   } else {
     maxNum = Number.parseInt(maxNum, 10);
-    if(maxNum <2 || Number.isInteger(maxNum) == false){
+    if(maxNum < 2 || Number.isInteger(maxNum) == false){
       alert("Oops :( - Please enter a valid number greater than 1! ");
       inputMaxNumber();
     }
@@ -190,6 +200,39 @@ document.getElementById("counter").innerHTML= "Total items left: ";
 document.getElementById("histCounter").innerHTML = "Previous items: ";
 document.getElementById("reloadButton").style.display= 'none';
 }
+
+function add() {
+    seconds++;
+    if (seconds >= 60) {
+        seconds = 0;
+        minutes++;
+        if (minutes >= 60) {
+            minutes = 0;
+            hours++;
+        }
+    }
+    
+    document.getElementsByTagName('h1')[0].textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
+    timer();
+}
+
+function timer() {
+    t = setTimeout(add, 1000);
+}
+
+/*timer();*/
+/* Start button */
+document.getElementById('start').onclick = timer;
+/* Stop button */
+document.getElementById('stop').onclick = function() {
+    clearTimeout(t);
+}
+/* Clear button */
+document.getElementById('clear').onclick = function() {
+    document.getElementsByTagName('h1')[0].textContent = "00:00:00";
+    seconds = 0; minutes = 0; hours = 0;
+}
+
 
 </script>
 
